@@ -1,0 +1,7 @@
+/* App.css is now mostly empty as styles are modularized. 
+   Only global app-level layout styles should remain here if needed. */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}

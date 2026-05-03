@@ -1,0 +1,30 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--spacing-md);
+}
+
+.title h2 {
+  font-size: 2.5rem;
+}
+
+.subtitle {
+  color: var(--color-text-light);
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.filterBtn {
+  padding: 0.4rem 1.2rem;
+  font-size: 0.8rem;
+}

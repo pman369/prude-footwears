@@ -1,0 +1,123 @@
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: var(--color-primary);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 0;
+}
+
+.sidebarHeader {
+  padding: 0 2rem;
+  margin-bottom: 3rem;
+}
+
+.sidebarHeader h2 {
+  color: white;
+  font-family: var(--font-serif);
+}
+
+.nav {
+  flex: 1;
+}
+
+.navItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.navItem:hover, .navItem.active {
+  color: white;
+  background-color: rgba(255,255,255,0.1);
+}
+
+.logoutBtn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+}
+
+.content {
+  flex: 1;
+  padding: 3rem;
+}
+
+.contentHeader {
+  margin-bottom: 3rem;
+}
+
+.tableWrapper {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  background-color: #fafafa;
+  padding: 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #eee;
+}
+
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+.statusBadge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.pending { background-color: #fff8e1; color: #f57f17; }
+.paid { background-color: #e8f5e9; color: #2e7d32; }
+.processing { background-color: #e3f2fd; color: #1565c0; }
+.shipped { background-color: #f3e5f5; color: #7b1fa2; }
+.delivered { background-color: #e0f2f1; color: #00695c; }
+
+.select {
+  padding: 0.4rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.placeholder {
+  text-align: center;
+  padding: 5rem;
+  color: #999;
+}
