@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
 import styles from './InventoryManager.module.css';
 import { Plus, Edit2, Trash2, X } from 'lucide-react';
-import { Product } from '../types';
+import type { Product } from '../types';
 
 export const InventoryManager = () => {
   const [products, setProducts] = useState<Product[]>([]);

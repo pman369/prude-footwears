@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
 import { ProductCard } from './ProductCard';
-import { Product } from '../types';
+import type { Product } from '../types';
 import styles from './ProductGrid.module.css';
 
 export const ProductGrid = () => {
