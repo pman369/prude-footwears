@@ -1,4 +1,4 @@
-import { type Product } from '../data/products';
+import { type Product } from '../types';
 import { handleWhatsAppOrder } from '../utils/order';
 import styles from './ProductCard.module.css';
 

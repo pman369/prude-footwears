@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { supabase } from './utils/supabase';
+import { Session } from '@supabase/supabase-js';
 import './App.css';
 
 // Public Components
@@ -33,7 +34,7 @@ const PublicLayout = () => (
 );
 
 function App() {
-  const [session, setSession] = useState<any>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

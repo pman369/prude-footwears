@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
 import styles from './InventoryManager.module.css';
 import { Plus, Edit2, Trash2, X } from 'lucide-react';
+import { Product } from '../types';
 
 export const InventoryManager = () => {
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<any>(null);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [page, setPage] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+  const PAGE_SIZE = 10;
   
   // Form State
   const [formData, setFormData] = useState({
@@ -21,21 +25,28 @@ export const InventoryManager = () => {
   });
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts(page);
+  }, [page]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (currentPage = page) => {
     setLoading(true);
-    const { data, error } = await supabase
+    const from = currentPage * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    const { data, count, error } = await supabase
       .from('products')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range(from, to);
     
-    if (!error) setProducts(data || []);
+    if (!error) {
+      setProducts(data || []);
+      if (count !== null) setTotalCount(count);
+    }
     setLoading(false);
   };
 
-  const handleOpenModal = (product: any = null) => {
+  const handleOpenModal = (product?: Product) => {
     if (product) {
       setEditingProduct(product);
       setFormData({
@@ -132,6 +143,26 @@ export const InventoryManager = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2rem' }}>
+        <button 
+          onClick={() => setPage(p => Math.max(0, p - 1))} 
+          disabled={page === 0 || loading}
+          className="btn btn-outline"
+        >
+          Previous
+        </button>
+        <span style={{ display: 'flex', alignItems: 'center' }}>
+          Page {page + 1} of {Math.max(1, Math.ceil(totalCount / PAGE_SIZE))}
+        </span>
+        <button 
+          onClick={() => setPage(p => p + 1)} 
+          disabled={(page + 1) * PAGE_SIZE >= totalCount || loading}
+          className="btn btn-outline"
+        >
+          Next
+        </button>
       </div>
 
       {isModalOpen && (

@@ -1,34 +1,62 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
 import { ProductCard } from './ProductCard';
+import { Product } from '../types';
 import styles from './ProductGrid.module.css';
 
 export const ProductGrid = () => {
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [filter, setFilter] = useState<'All' | 'Men' | 'Women'>('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const PAGE_SIZE = 8;
+
   useEffect(() => {
-    fetchProducts();
+    setPage(0);
+    setHasMore(true);
+    setProducts([]);
+    fetchProducts(0, true);
   }, [filter]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (currentPage = 0, reset = false) => {
     setLoading(true);
-    let query = supabase.from('products').select('*').eq('in_stock', true);
+    let query = supabase.from('products').select('*', { count: 'exact' }).eq('in_stock', true);
     
     if (filter !== 'All') {
       query = query.eq('category', filter);
     }
 
-    const { data, error } = await query.order('created_at', { ascending: false });
+    const from = currentPage * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    const { data, count, error } = await query
+      .order('created_at', { ascending: false })
+      .range(from, to);
 
     if (error) {
       setError('Failed to load products.');
     } else {
-      setProducts(data || []);
+      if (reset) {
+        setProducts(data || []);
+      } else {
+        setProducts(prev => [...prev, ...(data || [])]);
+      }
+      if (count !== null && from + (data?.length || 0) >= count) {
+        setHasMore(false);
+      } else if ((data?.length || 0) < PAGE_SIZE) {
+        setHasMore(false);
+      }
     }
     setLoading(false);
+  };
+
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchProducts(nextPage);
   };
 
   return (
@@ -65,11 +93,24 @@ export const ProductGrid = () => {
             <p>No products found in this category.</p>
           </div>
         ) : (
-          <div className={styles.grid}>
-            {products.map(product => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <>
+            <div className={styles.grid}>
+              {products.map(product => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+            {hasMore && (
+              <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                <button 
+                  onClick={handleLoadMore} 
+                  className="btn btn-outline"
+                  disabled={loading}
+                >
+                  {loading ? 'Loading...' : 'Load More'}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>
